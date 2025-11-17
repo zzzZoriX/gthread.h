@@ -59,13 +59,32 @@ typedef struct gthread_scheduler_t {
 
 static gthread_scheduler_t 
 gthread_main_scheduler = (gthread_scheduler_t){
-    .gthread_count = 0,
+    .gthread_count = -1,
     .gthread_current = -1
 };
 
-void gthread_main_scheduler_init(
-        void
+void gthread_scheduler_init(
+        gthread_scheduler_t*    // pointer to object of gthread_scheduler
+                                // if == NULL, then will used gthread_main_sheduler
     );
+
+void gthread_run_first(
+        gthread_scheduler_t*    // pointer to object of gthread_scheduler
+                                // if == NULL, then will used gthread_main_sheduler
+    );
+void gthread_run_most_priority(
+        gthread_scheduler_t*    // pointer to object of gthread_scheduler
+                                // if == NULL, then will used gthread_main_sheduler
+    );
+gthread_t* gthread_get_first(
+        gthread_scheduler_t*    // pointer to object of gthread_scheduler
+                                // if == NULL, then will used gthread_main_sheduler
+    );
+gthread_t* gthread_get_most_priority(
+        gthread_scheduler_t*    // pointer to object of gthread_scheduler
+                                // if == NULL, then will used gthread_main_sheduler
+    );
+
 i8 gthread_create(
         gthread_scheduler_t*,   // pointer to object of gthread_scheduler
                                 // if == NULL, then will used gthread_main_sheduler
