@@ -80,3 +80,18 @@ void gthread_yield(
         &sch->gthread_queue[sch->gthread_current]
     );
 }
+
+void gthread_term(
+        gthread_scheduler_t* sch
+) {
+    if(sch == NULL)
+    // read gthread.h desc for first arg in this function
+        sch = &gthread_main_scheduler;
+
+    if(sch->gthread_current >= 0){
+        sch->gthread_queue[sch->gthread_current].status = ST_TERMINATED;
+        free(sch->gthread_queue[sch->gthread_current].thread_stack_start_ptr);
+        --sch->gthread_current;
+    }
+    gthread_yield(sch);
+}
