@@ -97,7 +97,12 @@ void gthread_yield(
         gthread_scheduler_t*    // pointer to object of gthread_scheduler
                                 // if == NULL, then will used gthread_main_sheduler
     );
+
 void gthread_term(
+        gthread_scheduler_t*    // pointer to object of gthread_scheduler
+                                // if == NULL, then will used gthread_main_sheduler
+    );
+void gthread_term_all(
         gthread_scheduler_t*    // pointer to object of gthread_scheduler
                                 // if == NULL, then will used gthread_main_sheduler
     );

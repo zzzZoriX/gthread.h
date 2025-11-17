@@ -1,6 +1,6 @@
 #include "gthread.h"
 
-void gthread_main_scheduler_init(gthread_scheduler_t* sch) {
+void gthread_scheduler_init(gthread_scheduler_t* sch) {
     if(sch == NULL)
     // read gthread.h desc for first arg in this function
         sch = &gthread_main_scheduler;

@@ -91,7 +91,21 @@ void gthread_term(
     if(sch->gthread_current >= 0){
         sch->gthread_queue[sch->gthread_current].status = ST_TERMINATED;
         free(sch->gthread_queue[sch->gthread_current].thread_stack_start_ptr);
-        --sch->gthread_current;
+        --sch->gthread_count;
     }
     gthread_yield(sch);
+}
+
+void gthread_term_all(
+        gthread_scheduler_t* sch
+) {
+    if(sch == NULL)
+    // read gthread.h desc for first arg in this function
+        sch = &gthread_main_scheduler;
+
+    i8 gthreads_count = sch->gthread_count;        
+    for(i8 i = 0; i < gthreads_count; ++i){
+        sch->gthread_current = i;
+        gthread_term(sch);
+    }
 }
