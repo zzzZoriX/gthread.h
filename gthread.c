@@ -56,10 +56,14 @@ void gthread_yield(
     // read gthread.h desc for first arg in this function
         sch = &gthread_main_scheduler;
 
-    u32 next_ready_gthread = 0;
-
-    // this "while" equals to while(*same condition, but wo next_ready_gthread++*) ++next_ready_gthread;
-    while(sch->gthread_queue[next_ready_gthread].status != ST_READY && next_ready_gthread++ != sch->gthread_current);
+    u32 next_ready_gthread = (sch->gthread_current + 1) % sch->gthread_count;
+    if(sch->gthread_queue[next_ready_gthread].status != ST_READY)
+        for(i8 i = 1; i < sch->gthread_count; ++i){
+            next_ready_gthread = (sch->gthread_current + i) % sch->gthread_count;
+            
+            if(sch->gthread_queue[next_ready_gthread].status == ST_READY) 
+                break;
+        }
 
     if(next_ready_gthread == sch->gthread_current) return;
 
@@ -67,7 +71,7 @@ void gthread_yield(
     u32 old_gthread_id = sch->gthread_current;
     sch->gthread_current = next_ready_gthread;
 
-    if(old_gthread_id != UINT32_MAX) // check for object is initialized
+    if(old_gthread_id >= 0) // check for object is initialized
         sch->gthread_queue[old_gthread_id].status = ST_READY;
     sch->gthread_queue[sch->gthread_current].status = ST_RUNNING;
 

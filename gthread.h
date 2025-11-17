@@ -46,21 +46,21 @@ typedef struct gthread_t {
 
     thread_status_t status;
     i16 prio;
-    u32 id;
+    i8 id;
 } gthread_t;
 
 typedef struct gthread_scheduler_t {
     gthread_t gthread_queue[
             _GT_MAX_GTHREAD_COUNT_
         ];
-    i32 gthread_count;
-    u32 gthread_current; // current working gthread
+    i8  gthread_count,
+        gthread_current; // current working gthread
 } gthread_scheduler_t;
 
 static gthread_scheduler_t 
 gthread_main_scheduler = (gthread_scheduler_t){
-    .gthread_count = -1,
-    .gthread_current = UINT32_MAX
+    .gthread_count = 0,
+    .gthread_current = -1
 };
 
 void gthread_main_scheduler_init(
