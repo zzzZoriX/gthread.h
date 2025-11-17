@@ -46,3 +46,33 @@ i8 gthread_create(
 
     return 0;
 }
+
+extern void gthread_switch(gthread_t* old, gthread_t* new);
+
+void gthread_yield(
+        gthread_scheduler_t* sch
+) {
+    if(sch == NULL)
+    // read gthread.h desc for first arg in this function
+        sch = &gthread_main_scheduler;
+
+    u32 next_ready_gthread = 0;
+
+    // this "while" equals to while(*same condition, but wo next_ready_gthread++*) ++next_ready_gthread;
+    while(sch->gthread_queue[next_ready_gthread].status != ST_READY && next_ready_gthread++ != sch->gthread_current);
+
+    if(next_ready_gthread == sch->gthread_current) return;
+
+    // set new current working gthread
+    u32 old_gthread_id = sch->gthread_current;
+    sch->gthread_current = next_ready_gthread;
+
+    if(old_gthread_id != UINT32_MAX) // check for object is initialized
+        sch->gthread_queue[old_gthread_id].status = ST_READY;
+    sch->gthread_queue[sch->gthread_current].status = ST_RUNNING;
+
+    gthread_switch(
+        &sch->gthread_queue[old_gthread_id],
+        &sch->gthread_queue[sch->gthread_current]
+    );
+}
