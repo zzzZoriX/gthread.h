@@ -3,6 +3,7 @@
 i8 gthread_create(
         gthread_scheduler_t* sch, 
         gthread_t* gth, 
+        const i16 prio,
         void (*work)(void *), 
         void* arg
 ) {
@@ -38,6 +39,10 @@ i8 gthread_create(
     gth->r13 = 0;
     gth->r14 = 0;
     gth->r15 = 0;
+
+    gth->status = ST_READY;
+    gth->id = gth_id;
+    gth->prio = prio;
 
     return 0;
 }

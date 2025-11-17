@@ -71,6 +71,7 @@ i8 gthread_create(
                                 // if == NULL, then will used gthread_main_sheduler
 
         gthread_t*,             // pointer to object of gthread
+        const i16,              // gthread priority
         void (*)(void*),        // gthread function
         void*                   // count of arguments in function
     );
